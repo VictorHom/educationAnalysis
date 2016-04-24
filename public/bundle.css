@@ -1,10 +1,14 @@
 .container {
-  display: flex; }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; }
+
+#mooc_visualizations {
+  width: 100%; }
 
 #map {
-  position: absolute;
-  top: 0;
-  bottom: 0;
+  flex: 1 0 500px;
+  height: 400px;
   width: 50%; }
 
 /* Adjustments to account for mapbox.css box-sizing rules */
@@ -16,3 +20,7 @@
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box; }
+
+.widgetContainer {
+  width: 50%;
+  flex: 1 0 500px; }

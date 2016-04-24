@@ -1,14 +1,20 @@
-body {
-  // background: green;
-}
 .container {
   display : flex;
+  flex-wrap : wrap;
+  justify-content: center;
+}
+
+#mooc_visualizations {
+  width : 100%;
+  // display : flex;
 }
 // body { margin:0; padding:0; }
 #map {
-  position:absolute;
-  top:0;
-  bottom:0;
+  // position:absolute;
+  // top:0;
+  // bottom:0;
+  flex: 1 0 500px;
+  height : 400px;
   width:50%;
 }
 

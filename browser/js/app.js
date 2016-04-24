@@ -3,34 +3,38 @@ import '../style.scss';
 import React from 'react';
 import ReactDom from 'react-dom';
 import axios from 'axios';
-// const MyMap = require('mapbox');
+import InteractiveMap from './InteractiveMap/';
+import Widgets from './Widgets/'
 
-(function(){
-  L.mapbox.accessToken = 'pk.eyJ1IjoidmljdG9yaG9tIiwiYSI6ImNpanhubDJzajE1eG52Z2x6M3Foa2xndWwifQ.JgTA8hpRA2Dq_m6wSPAW2A';
-  var map = L.mapbox.map('map', 'mapbox.streets', {
-    zoomControl: false
-  });
-  L.control.zoomslider().addTo(map);
+class Dashboard extends React.Component {
 
-  axios.get('/api/students')
-  .then( students => {
-    console.log("in axios http get");
-    console.log(students);
-  });
-})()
+  constructor(props) {
+    super(props);
+    this.state = {
+      students : []
+    }
+  }
 
-var Test = React.createClass({
+  componentDidMount() {
+    axios.get('/api/students')
+    .then( students => {
+      this.setState({students : students.data});
+      console.log("in axios")
+      console.log(this.state.students);
+    });
+  }
+
 	render() {
 		return (
-			<div>
-			<div>Hello Test</div>
-			<div id="cube"></div>
+			<div className="container">
+        <InteractiveMap students={this.state.students} />
+        <Widgets students={this.state.students} />
 			</div>
 		);
 	}
-});
+};
 // add in react router;
-ReactDom.render(<Test/>, document.getElementById("mooc_visualizations"));
+ReactDom.render(<Dashboard/>, document.getElementById("mooc_visualizations"));
 // window.app = angular.module('edv', ['ui.router']);
 //
 // app.config(function ($urlRouterProvider, $locationProvider) {
