@@ -2,7 +2,8 @@
 import '../style.scss';
 import React from 'react';
 import ReactDom from 'react-dom';
-const Mapbox = require('mapbox');
+import axios from 'axios';
+// const MyMap = require('mapbox');
 
 (function(){
   L.mapbox.accessToken = 'pk.eyJ1IjoidmljdG9yaG9tIiwiYSI6ImNpanhubDJzajE1eG52Z2x6M3Foa2xndWwifQ.JgTA8hpRA2Dq_m6wSPAW2A';
@@ -10,6 +11,12 @@ const Mapbox = require('mapbox');
     zoomControl: false
   });
   L.control.zoomslider().addTo(map);
+
+  axios.get('/api/students')
+  .then( students => {
+    console.log("in axios http get");
+    console.log(students);
+  });
 })()
 
 var Test = React.createClass({
