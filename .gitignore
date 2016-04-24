@@ -4,3 +4,5 @@ npm-debug.log
 .DS_Store
 coverage
 bin/data/*
+public/main.js
+public/bundle.css

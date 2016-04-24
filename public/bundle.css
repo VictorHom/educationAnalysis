@@ -1,2 +1,18 @@
-body {
-  background: green; }
+.container {
+  display: flex; }
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%; }
+
+/* Adjustments to account for mapbox.css box-sizing rules */
+.leaflet-control-zoomslider-knob {
+  width: 14px;
+  height: 6px; }
+
+.leaflet-container .leaflet-control-zoomslider-body {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box; }
