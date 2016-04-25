@@ -21398,10 +21398,10 @@
 	    key: 'generateBar',
 	    value: function generateBar() {
 	      var data = this.props.students.reduce(function (accum, student) {
-	        if (accum[courseCodeMap[student.CourseCode]]) {
-	          accum[courseCodeMap[student.CourseCode]] += 1;
+	        if (accum[student.CourseCode]) {
+	          accum[student.CourseCode] += 1;
 	        } else {
-	          accum[courseCodeMap[student.CourseCode]] = 1;
+	          accum[student.CourseCode] = 1;
 	        }
 	        return accum;
 	      }, {});
@@ -21409,6 +21409,7 @@
 	      for (var prop in data) {
 	        values.push({ name: prop, count: data[prop] });
 	      }
+	      console.log(values);
 
 	      var margin = { top: 20, right: 20, bottom: 60, left: 60 };
 
@@ -21418,13 +21419,21 @@
 
 	      var xScale = _d2.default.scale.ordinal().domain(values.map(function (val) {
 	        return val.count;
-	      })).rangeBands([0, w], 0.1, 0);
+	      })).rangeBands([0, w], 0.1, 2);
+
+	      var xScaleCategory = _d2.default.scale.ordinal().domain(values.map(function (val) {
+	        return val.name;
+	      })).rangeBands([0, w], 0.1, 2);
 
 	      var yScale = _d2.default.scale.linear().domain([0, _d2.default.max(values.map(function (val) {
 	        return val.count;
 	      }))]).range([0, h]);
 
-	      svg.selectAll('rect').data(values).enter().append('rect').style('fill', 'green').attr('x', function (d, i) {
+	      var yScaleAxis = _d2.default.scale.linear().domain([0, _d2.default.max(values.map(function (val) {
+	        return val.count;
+	      }))]).range([h, 0]);
+
+	      svg.selectAll('rect').data(values).enter().append('rect').style('fill', 'steelblue').attr('x', function (d, i) {
 	        return xScale(d.count);
 	      }).attr('y', function (d) {
 	        return h - yScale(d.count);
@@ -21432,16 +21441,15 @@
 	        return yScale(d.count);
 	      });
 
-	      var xAxis = _d2.default.svg.axis().scale(xScale).orient('bottom')
-	      // .ticks(5)
-	      .tickValues(values.map(function (val) {
-	        return val.name;
-	      }));
-	      // .innerTickSize(6)
-	      // .outerTickSize(12)
-	      // .tickPadding(12);
+	      var xAxis = _d2.default.svg.axis().scale(xScaleCategory).orient('bottom');
 
-	      svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0, ' + (h + 0) + ')').call(xAxis);
+	      var yAxis = _d2.default.svg.axis().scale(yScaleAxis).orient('left');
+
+	      svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0, ' + (h + 0) + ')').call(xAxis).selectAll("text").attr("y", 5).attr("x", 9).attr("dy", ".20em").attr("transform", "rotate(45)").style("text-anchor", "start");
+
+	      svg.append('g').attr('class', 'y axis')
+	      // .attr('transform', 'translate('  + w + ',0' + ')')
+	      .call(yAxis);
 	    }
 	  }, {
 	    key: 'componentDidMount',

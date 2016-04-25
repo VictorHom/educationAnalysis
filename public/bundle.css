@@ -25,7 +25,13 @@
   width: 50%;
   flex: 1 0 500px; }
   .widgetContainer .simpleBar {
-    display: flex;
-    background-color: lightgray; }
+    display: flex; }
   .widgetContainer svg {
-    background-color: lightblue; }
+    width: 100%; }
+  .widgetContainer .axis {
+    font: 10px sans-serif; }
+  .widgetContainer .axis path,
+  .widgetContainer .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges; }

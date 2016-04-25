@@ -4,10 +4,23 @@
 
   .simpleBar {
     display: flex;
-    background-color: lightgray;
+    // background-color: lightgray;
   }
 
   svg {
-    background-color: lightblue;
+    width : 100%;
+    // background-color: lightblue;
   }
+
+  .axis {
+	  font: 10px sans-serif;
+	}
+
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+
 }
