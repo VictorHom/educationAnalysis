@@ -17,12 +17,16 @@ let courseCodeMap = {
   "8.MReV" : 'Mechanics Review'
 }
 
+// let testDivs = this.props.students.map((student,index) => {
+//   return (<div key={index}>{courseCodeMap[student.CourseCode]}</div>);
+// });
+
 export default class Widgets extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  componentDidMount() {
+  generateBar() {
     let data = this.props.students.reduce((accum, student) => {
       if (accum[courseCodeMap[student.CourseCode]]) {
         accum[courseCodeMap[student.CourseCode]] += 1;
@@ -31,28 +35,66 @@ export default class Widgets extends React.Component {
       }
       return accum;
     },{})
-    let key = [];
     let values = [];
     for (let prop in data) {
-      key.push(prop);
-      values.push(data[prop]);
+      values.push({name : prop, count : data[prop] });
     }
-    
-    let w = 400, h = 400;
-    let svg = d3.select('.simpleBar').append('svg')
-      .attr('width', w)
-      .attr('height', h)
 
+    var margin = {top: 20, right: 20, bottom: 60, left: 60};
+
+    let w = 400 - margin.left - margin.right,
+     h = 400 - margin.top - margin.bottom;
+    let svg = d3.select('.simpleBar').append('svg')
+      .attr('width', w + margin.left + margin.right)
+      .attr('height', h + margin.top + margin.bottom)
+      .append('g')
+      .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+    let xScale = d3.scale.ordinal()
+      .domain(values.map((val) => val.count ))
+      .rangeBands([0, w], 0.1, 0);
+
+    let yScale = d3.scale.linear()
+      .domain([0, d3.max(values.map(val => val.count ))])
+      .range([0, h]);
+
+    svg.selectAll('rect')
+    .data(values)
+    .enter()
+    .append('rect')
+    .style('fill', 'green')
+    .attr('x', function (d, i) {
+      return xScale(d.count);
+    })
+    .attr('y', function (d) {
+      return h - yScale(d.count);
+    })
+    .attr('width', xScale.rangeBand())
+    .attr('height', function (d) {
+      return yScale(d.count);
+    });
+
+    let xAxis = d3.svg.axis()
+      .scale(xScale)
+      .orient('bottom')
+      // .ticks(5)
+      .tickValues(values.map( val => val.name))
+      // .innerTickSize(6)
+      // .outerTickSize(12)
+      // .tickPadding(12);
+
+    svg.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', 'translate(0, '+ (h + 0) + ')')
+        .call(xAxis);
   }
 
+  componentDidMount() {}
+
   render() {
-    let testDivs = this.props.students.map((student,index) => {
-      return (<div key={index}>{courseCodeMap[student.CourseCode]}</div>);
-    });
+    this.generateBar();
     return (
       <div className="widgetContainer">
-        <div>Widgets</div>
-        {/*{testDivs}*/}
         <div className="simpleBar"></div>
       </div>
     )

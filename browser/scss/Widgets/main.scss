@@ -1,4 +1,13 @@
 .widgetContainer {
   width : 50%;
   flex: 1 0 500px;
+
+  .simpleBar {
+    display: flex;
+    background-color: lightgray;
+  }
+
+  svg {
+    background-color: lightblue;
+  }
 }

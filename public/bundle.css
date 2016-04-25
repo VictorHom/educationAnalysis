@@ -24,3 +24,8 @@
 .widgetContainer {
   width: 50%;
   flex: 1 0 500px; }
+  .widgetContainer .simpleBar {
+    display: flex;
+    background-color: lightgray; }
+  .widgetContainer svg {
+    background-color: lightblue; }

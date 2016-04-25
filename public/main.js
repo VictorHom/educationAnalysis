@@ -123,8 +123,6 @@
 
 	      _axios2.default.get('/api/students').then(function (students) {
 	        _this2.setState({ students: students.data });
-	        console.log("in axios");
-	        console.log(_this2.state.students);
 	      });
 	    }
 	  }, {
@@ -138,20 +136,8 @@
 	}(_react2.default.Component);
 
 	;
-	// add in react router;
+
 	_reactDom2.default.render(_react2.default.createElement(Dashboard, null), document.getElementById("mooc_visualizations"));
-	// window.app = angular.module('edv', ['ui.router']);
-	//
-	// app.config(function ($urlRouterProvider, $locationProvider) {
-	//     // This turns off hashbang urls (/#about) and changes it to something normal (/about)
-	//     $locationProvider.html5Mode(true);
-	//     // If we go to a URL that ui-router doesn't have registered, go to the "/" url.
-	//     $urlRouterProvider.otherwise('/');
-	//     // Trigger page refresh when accessing an OAuth route
-	//     // $urlRouterProvider.when('/auth/:provider', function () {
-	//     //     window.location.reload();
-	//     // });
-	// });
 
 /***/ },
 /* 1 */
@@ -21395,6 +21381,10 @@
 	  "8.MReV": 'Mechanics Review'
 	};
 
+	// let testDivs = this.props.students.map((student,index) => {
+	//   return (<div key={index}>{courseCodeMap[student.CourseCode]}</div>);
+	// });
+
 	var Widgets = function (_React$Component) {
 	  _inherits(Widgets, _React$Component);
 
@@ -21405,8 +21395,8 @@
 	  }
 
 	  _createClass(Widgets, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
+	    key: 'generateBar',
+	    value: function generateBar() {
 	      var data = this.props.students.reduce(function (accum, student) {
 	        if (accum[courseCodeMap[student.CourseCode]]) {
 	          accum[courseCodeMap[student.CourseCode]] += 1;
@@ -21415,24 +21405,52 @@
 	        }
 	        return accum;
 	      }, {});
-	      var key = [];
 	      var values = [];
 	      for (var prop in data) {
-	        key.push(prop);
-	        values.push(data[prop]);
+	        values.push({ name: prop, count: data[prop] });
 	      }
 
-	      var w = 400,
-	          h = 400;
-	      var svg = _d2.default.select('.simpleBar').append('svg').attr('width', w).attr('height', h);
+	      var margin = { top: 20, right: 20, bottom: 60, left: 60 };
+
+	      var w = 400 - margin.left - margin.right,
+	          h = 400 - margin.top - margin.bottom;
+	      var svg = _d2.default.select('.simpleBar').append('svg').attr('width', w + margin.left + margin.right).attr('height', h + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+	      var xScale = _d2.default.scale.ordinal().domain(values.map(function (val) {
+	        return val.count;
+	      })).rangeBands([0, w], 0.1, 0);
+
+	      var yScale = _d2.default.scale.linear().domain([0, _d2.default.max(values.map(function (val) {
+	        return val.count;
+	      }))]).range([0, h]);
+
+	      svg.selectAll('rect').data(values).enter().append('rect').style('fill', 'green').attr('x', function (d, i) {
+	        return xScale(d.count);
+	      }).attr('y', function (d) {
+	        return h - yScale(d.count);
+	      }).attr('width', xScale.rangeBand()).attr('height', function (d) {
+	        return yScale(d.count);
+	      });
+
+	      var xAxis = _d2.default.svg.axis().scale(xScale).orient('bottom')
+	      // .ticks(5)
+	      .tickValues(values.map(function (val) {
+	        return val.name;
+	      }));
+	      // .innerTickSize(6)
+	      // .outerTickSize(12)
+	      // .tickPadding(12);
+
+	      svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0, ' + (h + 0) + ')').call(xAxis);
 	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {}
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var testDivs = this.props.students.map(function (student, index) {
-	        return _react2.default.createElement('div', { key: index }, courseCodeMap[student.CourseCode]);
-	      });
-	      return _react2.default.createElement('div', { className: 'widgetContainer' }, _react2.default.createElement('div', null, 'Widgets'), _react2.default.createElement('div', { className: 'simpleBar' }));
+	      this.generateBar();
+	      return _react2.default.createElement('div', { className: 'widgetContainer' }, _react2.default.createElement('div', { className: 'simpleBar' }));
 	    }
 	  }]);
 
