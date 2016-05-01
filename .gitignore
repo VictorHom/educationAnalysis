@@ -6,3 +6,4 @@ coverage
 bin/data/*
 public/main.js
 public/bundle.css
+.vscode/

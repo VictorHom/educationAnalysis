@@ -21343,6 +21343,10 @@
 
 	var _d2 = _interopRequireDefault(_d);
 
+	var _barchart = __webpack_require__(187);
+
+	var _barchart2 = _interopRequireDefault(_barchart);
+
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
 	}
@@ -21381,10 +21385,6 @@
 	  "8.MReV": 'Mechanics Review'
 	};
 
-	// let testDivs = this.props.students.map((student,index) => {
-	//   return (<div key={index}>{courseCodeMap[student.CourseCode]}</div>);
-	// });
-
 	var Widgets = function (_React$Component) {
 	  _inherits(Widgets, _React$Component);
 
@@ -21395,70 +21395,10 @@
 	  }
 
 	  _createClass(Widgets, [{
-	    key: 'generateBar',
-	    value: function generateBar() {
-	      var data = this.props.students.reduce(function (accum, student) {
-	        if (accum[student.CourseCode]) {
-	          accum[student.CourseCode] += 1;
-	        } else {
-	          accum[student.CourseCode] = 1;
-	        }
-	        return accum;
-	      }, {});
-	      var values = [];
-	      for (var prop in data) {
-	        values.push({ name: prop, count: data[prop] });
-	      }
-	      console.log(values);
-
-	      var margin = { top: 20, right: 20, bottom: 60, left: 60 };
-
-	      var w = 400 - margin.left - margin.right,
-	          h = 400 - margin.top - margin.bottom;
-	      var svg = _d2.default.select('.simpleBar').append('svg').attr('width', w + margin.left + margin.right).attr('height', h + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
-
-	      var xScale = _d2.default.scale.ordinal().domain(values.map(function (val) {
-	        return val.count;
-	      })).rangeBands([0, w], 0.1, 2);
-
-	      var xScaleCategory = _d2.default.scale.ordinal().domain(values.map(function (val) {
-	        return val.name;
-	      })).rangeBands([0, w], 0.1, 2);
-
-	      var yScale = _d2.default.scale.linear().domain([0, _d2.default.max(values.map(function (val) {
-	        return val.count;
-	      }))]).range([0, h]);
-
-	      var yScaleAxis = _d2.default.scale.linear().domain([0, _d2.default.max(values.map(function (val) {
-	        return val.count;
-	      }))]).range([h, 0]);
-
-	      svg.selectAll('rect').data(values).enter().append('rect').style('fill', 'steelblue').attr('x', function (d, i) {
-	        return xScale(d.count);
-	      }).attr('y', function (d) {
-	        return h - yScale(d.count);
-	      }).attr('width', xScale.rangeBand()).attr('height', function (d) {
-	        return yScale(d.count);
-	      });
-
-	      var xAxis = _d2.default.svg.axis().scale(xScaleCategory).orient('bottom');
-
-	      var yAxis = _d2.default.svg.axis().scale(yScaleAxis).orient('left');
-
-	      svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0, ' + (h + 0) + ')').call(xAxis).selectAll("text").attr("y", 5).attr("x", 9).attr("dy", ".20em").attr("transform", "rotate(45)").style("text-anchor", "start");
-
-	      svg.append('g').attr('class', 'y axis')
-	      // .attr('transform', 'translate('  + w + ',0' + ')')
-	      .call(yAxis);
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {}
-	  }, {
 	    key: 'render',
 	    value: function render() {
-	      this.generateBar();
-	      return _react2.default.createElement('div', { className: 'widgetContainer' }, _react2.default.createElement('div', { className: 'simpleBar' }));
+	      _barchart2.default.generateBar(this.props.students);
+	      return _react2.default.createElement('div', { className: 'widgetContainer' }, _react2.default.createElement('div', { className: 'simpleBar' }), _react2.default.createElement('div', { className: 'simplePie' }));
 	    }
 	  }]);
 
@@ -31025,6 +30965,127 @@
 	  });
 	  if (true) this.d3 = d3, !(__WEBPACK_AMD_DEFINE_FACTORY__ = (d3), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)); else if (typeof module === "object" && module.exports) module.exports = d3; else this.d3 = d3;
 	}();
+
+/***/ },
+/* 187 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _d = __webpack_require__(186);
+
+	var _d2 = _interopRequireDefault(_d);
+
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	var courseCodeMap = {
+	  "CB22x": 'The Ancient Greek Hero',
+	  "CS50x": 'Introduction to Computer Science',
+	  "ER22x": 'Justice',
+	  "PH207x": 'Health in Numbers : Quantitative methods in Clinical and Public Health Research',
+	  "PH278x": 'Human Health and Global Environmental Change',
+	  "14.73x": 'The Challenges of Global Poverty',
+	  "6.002x": 'Circuits and Electronics',
+	  "2.01x": 'Elements of Structure',
+	  "3.091x": 'Introduction to Solid State Chemistry',
+	  "6.00x": 'Introduction to Computer Science and Programming',
+	  "7.00x": 'Introduction to Biology',
+	  "8.02x": 'Electricity and Magnetism',
+	  "8.MReV": 'Mechanics Review'
+	};
+
+	var generateBar = function generateBar(students) {
+	  console.log("in charMaker");
+	  var data = students.reduce(function (accum, student) {
+	    if (accum[student.CourseCode]) {
+	      accum[student.CourseCode] += 1;
+	    } else {
+	      accum[student.CourseCode] = 1;
+	    }
+	    return accum;
+	  }, {});
+	  var values = [];
+	  for (var prop in data) {
+	    values.push({ name: prop, count: data[prop] });
+	  }
+
+	  var margin = { top: 20, right: 20, bottom: 60, left: 60 };
+
+	  var w = 400 - margin.left - margin.right,
+	      h = 400 - margin.top - margin.bottom;
+	  var svg = _d2.default.select('.simpleBar').append('svg').attr('width', w + margin.left + margin.right).attr('height', h + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+	  var xScale = _d2.default.scale.ordinal().domain(values.map(function (val) {
+	    return val.count;
+	  })).rangeBands([0, w], 0.1, 2);
+
+	  var xScaleCategory = _d2.default.scale.ordinal().domain(values.map(function (val) {
+	    return val.name;
+	  })).rangeBands([0, w], 0.1, 2);
+
+	  var yScale = _d2.default.scale.linear().domain([0, _d2.default.max(values.map(function (val) {
+	    return val.count;
+	  }))]).range([0, h]);
+
+	  var yScaleAxis = _d2.default.scale.linear().domain([0, _d2.default.max(values.map(function (val) {
+	    return val.count;
+	  }))]).range([h, 0]);
+
+	  svg.selectAll('rect').data(values).enter().append('rect').style('fill', 'steelblue').attr('x', function (d, i) {
+	    return xScale(d.count);
+	  }).attr('y', function (d) {
+	    return h - yScale(d.count);
+	  }).attr('width', xScale.rangeBand()).attr('height', function (d) {
+	    return yScale(d.count);
+	  });
+
+	  var xAxis = _d2.default.svg.axis().scale(xScaleCategory).orient('bottom');
+
+	  var yAxis = _d2.default.svg.axis().scale(yScaleAxis).orient('left');
+
+	  svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0, ' + (h + 0) + ')').call(xAxis).selectAll("text").attr("y", 5).attr("x", 9).attr("dy", ".20em").attr("transform", "rotate(45)").style("text-anchor", "start");
+
+	  svg.append('g').attr('class', 'y axis')
+	  // .attr('transform', 'translate('  + w + ',0' + ')')
+	  .call(yAxis);
+	};
+
+	var generatePie = function generatePie(students) {
+	  var h = 300,
+	      w = 300;
+	  var radius = Math.min(w, h) / 2;
+	  var color = _d2.default.scale.category20b();
+
+	  var svg = _d2.default.select(".simplePie").append('svg').attr('width', w);
+	  attr('height', h).append('g');
+	  // check after to see if you need to translate
+	  //.attr('transform', 'translate(' + (width / 2) +  ',' + (height / 2) + ')');
+
+	  // need to transform the student data into the right format
+	  var arc = _d2.default.svg.arc().outerRadius(radius); //draws circle
+	  var pie = _d2.default.layout.pie().value(function (d) {
+	    return d.count;
+	  }) // this is incorrect
+	  .sort(null);
+	  //draws out the dividing segments
+
+	  var path = svg.selectAll('path').data(pie(dataset)).enter().append().attr('d', arc).attr('fill', function (d, i) {
+	    return color(d.data.label);
+	  });
+	};
+
+	var chartMaker = {
+	  generateBar: generateBar,
+	  generatePie: generatePie
+	};
+
+	module.exports = chartMaker;
 
 /***/ }
 /******/ ]);
