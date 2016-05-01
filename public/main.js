@@ -21399,8 +21399,8 @@
 	    value: function render() {
 	      console.log(this.props.students);
 	      _chart2.default.generateBar(this.props.students);
-	      _chart2.default.generatePie(this.props.students);
-	      return _react2.default.createElement('div', { className: 'widgetContainer' }, _react2.default.createElement('div', { className: 'simpleBar' }), _react2.default.createElement('div', { className: 'simplePie' }));
+	      _chart2.default.generateDonut(this.props.students);
+	      return _react2.default.createElement('div', { className: 'widgetContainer' }, _react2.default.createElement('div', { className: 'simpleBar' }), _react2.default.createElement('div', { className: 'simpleDonut' }));
 	    }
 	  }]);
 
@@ -31003,7 +31003,6 @@
 	};
 
 	var generateBar = function generateBar(students) {
-	  console.log("in charMaker");
 	  var data = students.reduce(function (accum, student) {
 	    if (accum[student.CourseCode]) {
 	      accum[student.CourseCode] += 1;
@@ -31058,7 +31057,8 @@
 	  .call(yAxis);
 	};
 
-	var generatePie = function generatePie(students) {
+	var generateDonut = function generateDonut(students) {
+	  var innerWidth = 75;
 	  var h = 300,
 	      w = 300;
 	  var radius = Math.min(w, h) / 2;
@@ -31086,12 +31086,12 @@
 	    data.push({ label: genderKey, count: dataset[genderKey] });
 	  }
 
-	  var svg = _d2.default.select(".simplePie").append('svg').attr('width', w).attr('height', h).append('g')
+	  var svg = _d2.default.select(".simpleDonut").append('svg').attr('width', w).attr('height', h).append('g')
 	  // check after to see if you need to translate
 	  .attr('transform', 'translate(' + w / 2 + ',' + h / 2 + ')');
 
 	  // need to transform the student data into the right format
-	  var arc = _d2.default.svg.arc().outerRadius(radius); //draws circle
+	  var arc = _d2.default.svg.arc().innerRadius(radius - innerWidth).outerRadius(radius); //draws circle
 	  var pie = _d2.default.layout.pie().value(function (d) {
 	    return d.count;
 	  }) // this is incorrect
@@ -31105,7 +31105,7 @@
 
 	var chartMaker = {
 	  generateBar: generateBar,
-	  generatePie: generatePie
+	  generateDonut: generateDonut
 	};
 
 	module.exports = chartMaker;

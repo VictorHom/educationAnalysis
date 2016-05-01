@@ -28,11 +28,11 @@ export default class Widgets extends React.Component {
   render() {
     console.log(this.props.students);
     chartMaker.generateBar(this.props.students);
-    chartMaker.generatePie(this.props.students);
+    chartMaker.generateDonut(this.props.students);
     return (
       <div className="widgetContainer">
         <div className="simpleBar"></div>
-        <div className="simplePie"></div>
+        <div className="simpleDonut"></div>
         {/* put in other charts like so */}
       </div>
     )

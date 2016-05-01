@@ -98,54 +98,32 @@ const generateBar = (students) => {
     .call(yAxis);
 }
 
-const generateDonut = (students) => {
-  let innerWidth = 75;
+const generateDonut= (students) => {
+  let donutWidth = 75;
   let h = 300, w = 300;
   let radius = Math.min(w, h) /2;
   let color = d3.scale.category20b();
 
-  let dataset = students.reduce((acc, student) => {
-      if (acc[student.gender]) {
-        acc[student.gender] += 1
-      } else {
-        if (student.gender === ""){
-          if (acc["NA"]) {
-            acc["NA"] += 1;
-            return acc;
-          } else {
-            acc["NA"] = 1;
-            return acc;
-          }
-        }
-        acc[student.gender] = 1;
-      }
-      return acc;
-  }, {});
-  let data = [];
-  for (var genderKey in dataset) {
-    data.push({label : genderKey, count : dataset[genderKey]});
-  }
-
   let svg = d3.select(".simpleDonut")
     .append('svg')
     .attr('width', w)
-    .attr('height', h)
+    attr('height', h)
     .append('g')
     // check after to see if you need to translate
-    .attr('transform', 'translate(' + (w / 2) +  ',' + (h / 2) + ')');
+    //.attr('transform', 'translate(' + (width / 2) +  ',' + (height / 2) + ')');
 
 
     // need to transform the student data into the right format
-    let arc = d3.svg.arc().innerRadius(radius - innerWidth).outerRadius(radius); //draws circle
+    let arc = d3.svg.arc().innerRadius(radius - donutWidth).outerRadius(radius); //draws circle
     let pie = d3.layout.pie()
       .value(function(d) {return d.count }) // this is incorrect
       .sort(null);
     //draws out the dividing segments
 
     let path = svg.selectAll('path')
-      .data(pie(data))
+      .data(pie(dataset))
       .enter()
-      .append("path")
+      .append()
       .attr('d', arc)
       .attr('fill', function(d, i) {
         return color(d.data.label);
