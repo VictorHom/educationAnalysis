@@ -21343,9 +21343,9 @@
 
 	var _d2 = _interopRequireDefault(_d);
 
-	var _barchart = __webpack_require__(187);
+	var _chart = __webpack_require__(187);
 
-	var _barchart2 = _interopRequireDefault(_barchart);
+	var _chart2 = _interopRequireDefault(_chart);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -21397,7 +21397,9 @@
 	  _createClass(Widgets, [{
 	    key: 'render',
 	    value: function render() {
-	      _barchart2.default.generateBar(this.props.students);
+	      console.log(this.props.students);
+	      _chart2.default.generateBar(this.props.students);
+	      _chart2.default.generatePie(this.props.students);
 	      return _react2.default.createElement('div', { className: 'widgetContainer' }, _react2.default.createElement('div', { className: 'simpleBar' }), _react2.default.createElement('div', { className: 'simplePie' }));
 	    }
 	  }]);
@@ -31062,10 +31064,31 @@
 	  var radius = Math.min(w, h) / 2;
 	  var color = _d2.default.scale.category20b();
 
-	  var svg = _d2.default.select(".simplePie").append('svg').attr('width', w);
-	  attr('height', h).append('g');
+	  var dataset = students.reduce(function (acc, student) {
+	    if (acc[student.gender]) {
+	      acc[student.gender] += 1;
+	    } else {
+	      if (student.gender === "") {
+	        if (acc["NA"]) {
+	          acc["NA"] += 1;
+	          return acc;
+	        } else {
+	          acc["NA"] = 1;
+	          return acc;
+	        }
+	      }
+	      acc[student.gender] = 1;
+	    }
+	    return acc;
+	  }, {});
+	  var data = [];
+	  for (var genderKey in dataset) {
+	    data.push({ label: genderKey, count: dataset[genderKey] });
+	  }
+
+	  var svg = _d2.default.select(".simplePie").append('svg').attr('width', w).attr('height', h).append('g')
 	  // check after to see if you need to translate
-	  //.attr('transform', 'translate(' + (width / 2) +  ',' + (height / 2) + ')');
+	  .attr('transform', 'translate(' + w / 2 + ',' + h / 2 + ')');
 
 	  // need to transform the student data into the right format
 	  var arc = _d2.default.svg.arc().outerRadius(radius); //draws circle
@@ -31075,7 +31098,7 @@
 	  .sort(null);
 	  //draws out the dividing segments
 
-	  var path = svg.selectAll('path').data(pie(dataset)).enter().append().attr('d', arc).attr('fill', function (d, i) {
+	  var path = svg.selectAll('path').data(pie(data)).enter().append("path").attr('d', arc).attr('fill', function (d, i) {
 	    return color(d.data.label);
 	  });
 	};

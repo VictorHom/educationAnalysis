@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import d3 from 'd3';
-import chartMaker from './barchart/';
+import chartMaker from './chart/';
 
 
 let courseCodeMap = {
@@ -26,7 +26,9 @@ export default class Widgets extends React.Component {
   }
 
   render() {
+    console.log(this.props.students);
     chartMaker.generateBar(this.props.students);
+    chartMaker.generatePie(this.props.students);
     return (
       <div className="widgetContainer">
         <div className="simpleBar"></div>

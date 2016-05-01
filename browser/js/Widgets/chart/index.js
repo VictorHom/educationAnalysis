@@ -104,13 +104,35 @@ const generatePie = (students) => {
   let radius = Math.min(w, h) /2;
   let color = d3.scale.category20b();
 
+  let dataset = students.reduce((acc, student) => {
+      if (acc[student.gender]) {
+        acc[student.gender] += 1
+      } else {
+        if (student.gender === ""){
+          if (acc["NA"]) {
+            acc["NA"] += 1;
+            return acc;
+          } else {
+            acc["NA"] = 1;
+            return acc;
+          }
+        }
+        acc[student.gender] = 1;
+      }
+      return acc;
+  }, {});
+  let data = [];
+  for (var genderKey in dataset) {
+    data.push({label : genderKey, count : dataset[genderKey]});
+  }
+
   let svg = d3.select(".simplePie")
     .append('svg')
     .attr('width', w)
-    attr('height', h)
+    .attr('height', h)
     .append('g')
     // check after to see if you need to translate
-    //.attr('transform', 'translate(' + (width / 2) +  ',' + (height / 2) + ')');
+    .attr('transform', 'translate(' + (w / 2) +  ',' + (h / 2) + ')');
 
 
     // need to transform the student data into the right format
@@ -121,9 +143,9 @@ const generatePie = (students) => {
     //draws out the dividing segments
 
     let path = svg.selectAll('path')
-      .data(pie(dataset))
+      .data(pie(data))
       .enter()
-      .append()
+      .append("path")
       .attr('d', arc)
       .attr('fill', function(d, i) {
         return color(d.data.label);
