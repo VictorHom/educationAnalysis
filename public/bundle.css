@@ -35,3 +35,7 @@
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges; }
+  .widgetContainer .legend {
+    font-size: 12px; }
+  .widgetContainer rect {
+    stroke-width: 2; }
