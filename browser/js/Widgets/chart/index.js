@@ -175,6 +175,39 @@ const generateDonut = (students) => {
       .attr('x', legendRectSize + legendSpacing)
       .attr('y', legendRectSize - 2)
       .text(function(d){ return d.toUpperCase(); });
+
+    let tooltip = d3.select('.simpleDonut')
+      .append('div')
+      .attr('class', 'tooltip');
+
+    tooltip.append('div')
+      .attr('class', 'label');
+
+    tooltip.append('div')
+      .attr('class', 'count');
+
+    tooltip.append('div')
+      .attr('class', 'percent');
+
+    path.on('mouseover', function(d) {
+      let total = d3.sum(data.map(function(d) {
+        return d.count;
+      }));
+      let percent = Math.round(1000 * d.data.count / total) / 10;
+      tooltip.select('.label').html(d.data.label);
+      tooltip.select('.count').html(d.data.count);
+      tooltip.select('.percent').html(percent + '%');
+      tooltip.style('display', 'block');
+    });
+
+    path.on('mouseout', function(d) {
+      tooltip.style('display', 'none');
+    });
+
+    path.on('mousemove', function(d) {
+      tooltip.style('top', (d3.event.layerY + 10) + 'px')
+        .style('left', (d3.event.layerX + 10) + 'px');
+    });
 }
 
 const chartMaker = {

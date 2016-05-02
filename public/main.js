@@ -21400,7 +21400,7 @@
 	      console.log(this.props.students);
 	      _chart2.default.generateBar(this.props.students);
 	      _chart2.default.generateDonut(this.props.students);
-	      return _react2.default.createElement('div', { className: 'widgetContainer' }, _react2.default.createElement('div', { className: 'simpleBar' }), _react2.default.createElement('div', { className: 'simpleDonut' }));
+	      return _react2.default.createElement('div', { className: 'widgetContainer' }, _react2.default.createElement('button', null, ' ->>> '), _react2.default.createElement('div', { className: 'simpleBar' }), _react2.default.createElement('div', { className: 'simpleDonut' }));
 	    }
 	  }]);
 
@@ -31114,6 +31114,33 @@
 	  legend.append('rect').attr('width', legendRectSize).attr('height', legendRectSize).style('fill', color).style('stroke', color);
 	  legend.append('text').attr('x', legendRectSize + legendSpacing).attr('y', legendRectSize - 2).text(function (d) {
 	    return d.toUpperCase();
+	  });
+
+	  var tooltip = _d2.default.select('.simpleDonut').append('div').attr('class', 'tooltip');
+
+	  tooltip.append('div').attr('class', 'label');
+
+	  tooltip.append('div').attr('class', 'count');
+
+	  tooltip.append('div').attr('class', 'percent');
+
+	  path.on('mouseover', function (d) {
+	    var total = _d2.default.sum(data.map(function (d) {
+	      return d.count;
+	    }));
+	    var percent = Math.round(1000 * d.data.count / total) / 10;
+	    tooltip.select('.label').html(d.data.label);
+	    tooltip.select('.count').html(d.data.count);
+	    tooltip.select('.percent').html(percent + '%');
+	    tooltip.style('display', 'block');
+	  });
+
+	  path.on('mouseout', function (d) {
+	    tooltip.style('display', 'none');
+	  });
+
+	  path.on('mousemove', function (d) {
+	    tooltip.style('top', _d2.default.event.layerY + 10 + 'px').style('left', _d2.default.event.layerX + 10 + 'px');
 	  });
 	};
 

@@ -31,6 +31,7 @@ export default class Widgets extends React.Component {
     chartMaker.generateDonut(this.props.students);
     return (
       <div className="widgetContainer">
+        <button> ->>> </button>
         <div className="simpleBar"></div>
         <div className="simpleDonut"></div>
         {/* put in other charts like so */}
