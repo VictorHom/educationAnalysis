@@ -26,14 +26,21 @@
   .legend {
     font-size: 12px;
   }
+
   rect {
     stroke-width: 2;
+    cursor : pointer;
+  }
+
+  rect.disabled {
+    fill: transparent !important;
   }
 
   .simpleDonut {
     height: 360px;
     position: relative;
     width: 360px;
+    margin : 0 auto;
   }
 
   .tooltip {
@@ -49,6 +56,11 @@
     top: 95px;
     width: 80px;
     z-index: 10;
+  }
+
+  h1 {
+    font-size: 14px;
+    text-align: center;
   }
 
 }

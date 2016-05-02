@@ -124,7 +124,7 @@ const generateDonut = (students) => {
   }, {});
   let data = [];
   for (var genderKey in dataset) {
-    data.push({label : genderKey, count : dataset[genderKey]});
+    data.push({label : genderKey, count : dataset[genderKey], enabled : true});
   }
 
   let svg = d3.select(".simpleDonut")
@@ -137,7 +137,8 @@ const generateDonut = (students) => {
 
 
     // need to transform the student data into the right format
-    let arc = d3.svg.arc().innerRadius(radius - innerWidth).outerRadius(radius); //draws circle
+    let arc = d3.svg.arc()
+      .innerRadius(radius - innerWidth).outerRadius(radius); //draws circle
     let pie = d3.layout.pie()
       .value(function(d) {return d.count }) // this is incorrect
       .sort(null);
@@ -150,7 +151,8 @@ const generateDonut = (students) => {
       .attr('d', arc)
       .attr('fill', function(d, i) {
         return color(d.data.label);
-      });
+      })
+      .each(function(d) { this._current = d; });
 
     let legendRectSize = 18;
     let legendSpacing = 4;
@@ -170,7 +172,39 @@ const generateDonut = (students) => {
       .attr('width', legendRectSize)
       .attr('height', legendRectSize)
       .style('fill', color)
-      .style('stroke', color);
+      .style('stroke', color)
+      .on('click', function(label) {
+        let rect = d3.select(this);
+          let enabled = true;
+          let totalEnabled = d3.sum(data.map(function(d) {
+            return (d.enabled) ? 1 : 0;
+          }));
+
+          if (rect.attr('class') === 'disabled') {
+            rect.attr('class', '');
+          } else {
+            if (totalEnabled < 2) return;
+            rect.attr('class', 'disabled');
+            enabled = false;
+          }
+
+          pie.value(function(d) {
+            if (d.label === label) d.enabled = enabled;
+            return (d.enabled) ? d.count : 0;
+          });
+
+          path = path.data(pie(data));
+
+          path.transition()
+            .duration(750)
+            .attrTween('d', function(d) {
+              let interpolate = d3.interpolate(this._current, d);
+              this._current = interpolate(0);
+              return function(t) {
+                return arc(interpolate(t));
+              };
+            });
+      });
     legend.append('text')
       .attr('x', legendRectSize + legendSpacing)
       .attr('y', legendRectSize - 2)
@@ -191,7 +225,7 @@ const generateDonut = (students) => {
 
     path.on('mouseover', function(d) {
       let total = d3.sum(data.map(function(d) {
-        return d.count;
+        return (d.enabled) ? d.count : 0;
       }));
       let percent = Math.round(1000 * d.data.count / total) / 10;
       tooltip.select('.label').html(d.data.label);

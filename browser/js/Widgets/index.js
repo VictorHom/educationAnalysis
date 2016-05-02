@@ -33,6 +33,7 @@ export default class Widgets extends React.Component {
       <div className="widgetContainer">
         <button> ->>> </button>
         <div className="simpleBar"></div>
+        <h1>Toronto Parking Tickets by Weekday in 2012</h1>
         <div className="simpleDonut"></div>
         {/* put in other charts like so */}
       </div>

@@ -21400,7 +21400,7 @@
 	      console.log(this.props.students);
 	      _chart2.default.generateBar(this.props.students);
 	      _chart2.default.generateDonut(this.props.students);
-	      return _react2.default.createElement('div', { className: 'widgetContainer' }, _react2.default.createElement('button', null, ' ->>> '), _react2.default.createElement('div', { className: 'simpleBar' }), _react2.default.createElement('div', { className: 'simpleDonut' }));
+	      return _react2.default.createElement('div', { className: 'widgetContainer' }, _react2.default.createElement('button', null, ' ->>> '), _react2.default.createElement('div', { className: 'simpleBar' }), _react2.default.createElement('h1', null, 'Toronto Parking Tickets by Weekday in 2012'), _react2.default.createElement('div', { className: 'simpleDonut' }));
 	    }
 	  }]);
 
@@ -31083,7 +31083,7 @@
 	  }, {});
 	  var data = [];
 	  for (var genderKey in dataset) {
-	    data.push({ label: genderKey, count: dataset[genderKey] });
+	    data.push({ label: genderKey, count: dataset[genderKey], enabled: true });
 	  }
 
 	  var svg = _d2.default.select(".simpleDonut").append('svg').attr('width', w).attr('height', h).append('g')
@@ -31100,6 +31100,8 @@
 
 	  var path = svg.selectAll('path').data(pie(data)).enter().append("path").attr('d', arc).attr('fill', function (d, i) {
 	    return color(d.data.label);
+	  }).each(function (d) {
+	    this._current = d;
 	  });
 
 	  var legendRectSize = 18;
@@ -31111,7 +31113,36 @@
 	    var vert = i * height - offset;
 	    return 'translate(' + horz + ',' + vert + ')';
 	  });
-	  legend.append('rect').attr('width', legendRectSize).attr('height', legendRectSize).style('fill', color).style('stroke', color);
+	  legend.append('rect').attr('width', legendRectSize).attr('height', legendRectSize).style('fill', color).style('stroke', color).on('click', function (label) {
+	    var rect = _d2.default.select(this);
+	    var enabled = true;
+	    var totalEnabled = _d2.default.sum(data.map(function (d) {
+	      return d.enabled ? 1 : 0;
+	    }));
+
+	    if (rect.attr('class') === 'disabled') {
+	      rect.attr('class', '');
+	    } else {
+	      if (totalEnabled < 2) return;
+	      rect.attr('class', 'disabled');
+	      enabled = false;
+	    }
+
+	    pie.value(function (d) {
+	      if (d.label === label) d.enabled = enabled;
+	      return d.enabled ? d.count : 0;
+	    });
+
+	    path = path.data(pie(data));
+
+	    path.transition().duration(750).attrTween('d', function (d) {
+	      var interpolate = _d2.default.interpolate(this._current, d);
+	      this._current = interpolate(0);
+	      return function (t) {
+	        return arc(interpolate(t));
+	      };
+	    });
+	  });
 	  legend.append('text').attr('x', legendRectSize + legendSpacing).attr('y', legendRectSize - 2).text(function (d) {
 	    return d.toUpperCase();
 	  });
@@ -31126,7 +31157,7 @@
 
 	  path.on('mouseover', function (d) {
 	    var total = _d2.default.sum(data.map(function (d) {
-	      return d.count;
+	      return d.enabled ? d.count : 0;
 	    }));
 	    var percent = Math.round(1000 * d.data.count / total) / 10;
 	    tooltip.select('.label').html(d.data.label);
