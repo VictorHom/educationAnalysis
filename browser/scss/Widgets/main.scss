@@ -1,9 +1,15 @@
 .widgetContainer {
+
   width : 50%;
   flex: 1 0 500px;
 
+
+  .hideChart {
+    display: none;
+  }
+
   .simpleBar {
-    display: flex;
+    // display: flex;
     // background-color: lightgray;
   }
 

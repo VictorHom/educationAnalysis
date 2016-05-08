@@ -1,7 +1,13 @@
+* {
+  font-family: Roboto,sans-serif;
+}
+
 .container {
   display : flex;
-  flex-wrap : wrap;
+  // flex-wrap : wrap;
   justify-content: center;
+  // width : 1000px;
+  margin : 0 auto;
 }
 
 #mooc_visualizations {
@@ -13,9 +19,15 @@
   // position:absolute;
   // top:0;
   // bottom:0;
-  flex: 1 0 500px;
-  height : 400px;
-  width:50%;
+  // flex: 1 0 700px;
+  height: 400px;
+  // width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.leaflet-popup-content img {
+  // max-width:80%;
 }
 
 /* Adjustments to account for mapbox.css box-sizing rules */

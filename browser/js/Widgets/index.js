@@ -19,22 +19,59 @@ let courseCodeMap = {
   "8.MReV" : 'Mechanics Review'
 };
 
+let currentViz = ["simpleBar", "simpleDonut"];
+let currentVizIndex = 0;
+let students;
 
 export default class Widgets extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  switchViz() {
+    currentVizIndex++;
+    if (currentVizIndex === currentViz.length) {
+      currentVizIndex = 0;
+    }
+    console.log(currentVizIndex);
+    var widgets = document.getElementsByClassName('widgetContainer')[0];
+    var charts = widgets.getElementsByTagName('div');
+    for (let i = 0; i < charts.length; i++) {
+      if (charts[i].className.includes("hideChart")){
+        let currentClasses = charts[i].className;
+        currentClasses = currentClasses.slice(0, currentClasses.indexOf("hideChart")) +
+          currentClasses.slice(currentClasses.indexOf("hideChart")+"hideChart".length)
+        charts[i].className = currentClasses.trim();
+      }
+      // remove hideChart everytime and add back on
+      if(currentVizIndex !== i) {
+        charts[i].className = charts[i].className + " hideChart";
+      }
+    }
+    // if (currentVizIndex === 0){
+    //   chartMaker.generateBar(students);
+    // } else if (currentVizIndex === 1) {
+    //   chartMaker.generateDonut(students);
+    // }
+  }
+
   render() {
+    students = this.props.students;
     console.log(this.props.students);
     chartMaker.generateBar(this.props.students);
     chartMaker.generateDonut(this.props.students);
     return (
       <div className="widgetContainer">
-        <button> ->>> </button>
-        <div className="simpleBar"></div>
-        <h1>Toronto Parking Tickets by Weekday in 2012</h1>
-        <div className="simpleDonut"></div>
+        <button
+          onClick=
+          {
+            this.switchViz
+          }
+        >
+        ->>>
+        </button>
+        <div className={ "simpleBar" }></div>
+        <div className={ "simpleDonut hideChart" }></div>
         {/* put in other charts like so */}
       </div>
     )

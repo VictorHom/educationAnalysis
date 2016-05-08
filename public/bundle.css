@@ -1,15 +1,18 @@
+* {
+  font-family: Roboto,sans-serif; }
+
 .container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center; }
+  justify-content: center;
+  margin: 0 auto; }
 
 #mooc_visualizations {
   width: 100%; }
 
 #map {
-  flex: 1 0 500px;
   height: 400px;
-  width: 50%; }
+  width: 100%;
+  margin: 0 auto; }
 
 /* Adjustments to account for mapbox.css box-sizing rules */
 .leaflet-control-zoomslider-knob {
@@ -24,8 +27,8 @@
 .widgetContainer {
   width: 50%;
   flex: 1 0 500px; }
-  .widgetContainer .simpleBar {
-    display: flex; }
+  .widgetContainer .hideChart {
+    display: none; }
   .widgetContainer svg {
     width: 100%; }
   .widgetContainer .axis {

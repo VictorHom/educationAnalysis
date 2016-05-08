@@ -21385,6 +21385,10 @@
 	  "8.MReV": 'Mechanics Review'
 	};
 
+	var currentViz = ["simpleBar", "simpleDonut"];
+	var currentVizIndex = 0;
+	var students = void 0;
+
 	var Widgets = function (_React$Component) {
 	  _inherits(Widgets, _React$Component);
 
@@ -21395,12 +21399,42 @@
 	  }
 
 	  _createClass(Widgets, [{
+	    key: 'switchViz',
+	    value: function switchViz() {
+	      currentVizIndex++;
+	      if (currentVizIndex === currentViz.length) {
+	        currentVizIndex = 0;
+	      }
+	      console.log(currentVizIndex);
+	      var widgets = document.getElementsByClassName('widgetContainer')[0];
+	      var charts = widgets.getElementsByTagName('div');
+	      for (var i = 0; i < charts.length; i++) {
+	        if (charts[i].className.includes("hideChart")) {
+	          var currentClasses = charts[i].className;
+	          currentClasses = currentClasses.slice(0, currentClasses.indexOf("hideChart")) + currentClasses.slice(currentClasses.indexOf("hideChart") + "hideChart".length);
+	          charts[i].className = currentClasses.trim();
+	        }
+	        // remove hideChart everytime and add back on
+	        if (currentVizIndex !== i) {
+	          charts[i].className = charts[i].className + " hideChart";
+	        }
+	      }
+	      // if (currentVizIndex === 0){
+	      //   chartMaker.generateBar(students);
+	      // } else if (currentVizIndex === 1) {
+	      //   chartMaker.generateDonut(students);
+	      // }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
+	      students = this.props.students;
 	      console.log(this.props.students);
 	      _chart2.default.generateBar(this.props.students);
 	      _chart2.default.generateDonut(this.props.students);
-	      return _react2.default.createElement('div', { className: 'widgetContainer' }, _react2.default.createElement('button', null, ' ->>> '), _react2.default.createElement('div', { className: 'simpleBar' }), _react2.default.createElement('h1', null, 'Toronto Parking Tickets by Weekday in 2012'), _react2.default.createElement('div', { className: 'simpleDonut' }));
+	      return _react2.default.createElement('div', { className: 'widgetContainer' }, _react2.default.createElement('button', {
+	        onClick: this.switchViz
+	      }, '->>>'), _react2.default.createElement('div', { className: "simpleBar" }), _react2.default.createElement('div', { className: "simpleDonut hideChart" }));
 	    }
 	  }]);
 
