@@ -5,4 +5,4 @@ and check if I could find any insights. Interesting article from 2014: http://ww
 
 The data is from EdX.
 
-![alt tag](http://imgur.com/bijkTIQ)
+![alt tag](https://github.com/VictorHom/educationAnalysis/blob/master/education.png)
