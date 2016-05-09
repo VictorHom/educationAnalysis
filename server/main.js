@@ -5,7 +5,7 @@ var chalk = require('chalk');
 // mongoose establishing a connection to a MongoDB database.
 
 // comment out because of mlab issues
-//var startDb = require('./db');
+// var startDb = require('./db');
 
 // Create a node server instance! cOoL!
 var server = require('http').createServer();
@@ -24,6 +24,8 @@ var startServer = function () {
     });
 
 };
+createApplication()
+startServer();
 
 // startDb.then(createApplication).then(startServer).catch(function (err) {
 //     console.error(chalk.red(err.stack));
