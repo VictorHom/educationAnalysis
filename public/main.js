@@ -21407,7 +21407,7 @@
 	      }
 	      console.log(currentVizIndex);
 	      var widgets = document.getElementsByClassName('widgetContainer')[0];
-	      var charts = widgets.getElementsByTagName('div');
+	      var charts = widgets.getElementsByClassName('chart');
 	      for (var i = 0; i < charts.length; i++) {
 	        if (charts[i].className.includes("hideChart")) {
 	          var currentClasses = charts[i].className;
@@ -21434,7 +21434,7 @@
 	      _chart2.default.generateDonut(this.props.students);
 	      return _react2.default.createElement('div', { className: 'widgetContainer' }, _react2.default.createElement('button', {
 	        onClick: this.switchViz
-	      }, '->>>'), _react2.default.createElement('div', { className: "simpleBar" }), _react2.default.createElement('div', { className: "simpleDonut hideChart" }));
+	      }, 'NEXT'), _react2.default.createElement('div', { className: "chart simpleBar" }), _react2.default.createElement('div', { className: "chart simpleDonut hideChart" }));
 	    }
 	  }]);
 

@@ -35,7 +35,7 @@ export default class Widgets extends React.Component {
     }
     console.log(currentVizIndex);
     var widgets = document.getElementsByClassName('widgetContainer')[0];
-    var charts = widgets.getElementsByTagName('div');
+    var charts = widgets.getElementsByClassName('chart');
     for (let i = 0; i < charts.length; i++) {
       if (charts[i].className.includes("hideChart")){
         let currentClasses = charts[i].className;
@@ -68,10 +68,10 @@ export default class Widgets extends React.Component {
             this.switchViz
           }
         >
-        ->>>
+        NEXT
         </button>
-        <div className={ "simpleBar" }></div>
-        <div className={ "simpleDonut hideChart" }></div>
+        <div className={ "chart simpleBar" }></div>
+        <div className={ "chart simpleDonut hideChart" }></div>
         {/* put in other charts like so */}
       </div>
     )
